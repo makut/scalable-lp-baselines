@@ -40,6 +40,14 @@ compatible with your PyTorch, CUDA, and hardware stack. For a local
 single-process smoke run, set `embedding_table_config.backend: vanilla` in the
 Node2Vec YAML config.
 
+The full `pip freeze` snapshot from the CUDA 12.1 experiment environment is
+available in
+[`requirements-freeze.cuda121.txt`](requirements-freeze.cuda121.txt). It
+includes `torch`, `torchrec`, and `fbgemm_gpu` CUDA builds as well as packages
+outside this project's minimal dependency set. Reproducing that environment
+may require the same CUDA-compatible package indexes used by the original
+machine.
+
 GRAPE is optional:
 
 ```bash

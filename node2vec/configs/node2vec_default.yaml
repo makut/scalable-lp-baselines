@@ -1,0 +1,77 @@
+dataset:
+  path: /data/lpp/my_dataset/train_csr
+  split_root: /data/lpp/my_dataset
+  use_mmap: true
+  file_endian: little
+  is_directed: false
+
+output:
+  dir: /data/lpp-runs/my_dataset/node2vec
+  history_file: train_history.json
+  resolved_config_file: resolved_config.json
+
+embedding_table_config:
+  backend: torchrec
+  num_embeddings: null  # filled from GraphCSR num_nodes at runtime
+  embedding_dim: 128
+  dtype: fp32
+  init_type: normal
+  init_kwargs: {}
+  table_name: node_table
+  feature_name: node
+  sharding_type: row_wise
+  compute_kernel_policy: auto
+  optimizer_type: adam
+  optimizer_kwargs:
+    learning_rate: 0.01
+
+training:
+  batch_size: 4096
+  walk_length: 10
+  context_size: 5
+  walks_per_node: 5
+  p: 1.0
+  q: 1.0
+  num_negative_samples: 1
+
+  # When true, sample `num_negative_samples` random nodes once per batch and
+  # score every positive anchor against the same pool (matmul). Reduces the
+  # negative-side embedding-lookup volume by ~Bp*C and is the recommended path
+  # when sharded all2all dominates step time.
+  enable_shared_negatives: false
+
+  use_nce_bias: false
+  loss_reduction: mean
+
+  backend: nccl
+
+  num_epochs: 5
+  seed: 42
+  device: null
+  log_every: 100
+  show_progress: true
+
+  checkpoint_metric: train_loss
+  checkpoint_metric_mode: min
+  save_best_checkpoint: false
+  checkpoint_every_steps: null
+  checkpoint_every_epoch: true
+  checkpoint_dir: null
+  resume_checkpoint_dir: null
+  tensorboard_log_dir: null
+
+  num_sampler_workers: 8
+  pin_memory: true
+  drop_last: true
+
+  # Parameter-free LP validation (dot-product) on val edges. Requires
+  # dataset.split_root or dataset.valid_edge_path / dataset.valid_edge_neg_path.
+  val_eval_every: 5000  # global steps between val evals; null disables
+  val_batch_size: 65536
+  val_num_workers: 0
+  val_metrics: [roc_auc@k, hits@k, recall@k, ndcg@k, mrr, mrr@k]
+  val_metrics_at_k: [10, 50, 100]
+  val_treat_as_undirected: true
+  val_max_batches: null
+
+  is_directed: false

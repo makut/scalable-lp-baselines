@@ -1,0 +1,62 @@
+dataset:
+  num_nodes: 0
+  root: /data/lpp/my_dataset
+  graph_csr_use_mmap: true
+  graph_csr_file_endian: big
+  graph_csr_allow_non_native: true
+  graph_csr_chunk_bytes: 268435456
+  mmap: true
+  has_self_loops: false
+  sample_seed: 12345
+
+train_loader:
+  batch_size: 32
+  seed: 42
+  num_workers: 4
+  negative_sampling:
+    name: uniform_nonedge
+    neg_per_pos: 1
+    seed: 42
+    reject_self_loops: true
+
+seal:
+  num_hops: 1
+  node_label: drnl
+  ratio_per_hop: 1.0
+  max_nodes_per_hop: null
+  per_vertex_oversample: 1.5
+  # false restores full-frontier neighbor collection before sampling.
+  graph_csr_use_per_vertex_sampling: true
+  # false restores adjacency-list scanning when building the induced subgraph.
+  graph_csr_use_pairwise_subgraph: true
+  directed: false
+
+model:
+  name: DGCNN
+  hidden_channels: 32
+  num_layers: 3
+  sortpool_k: 0.6
+  max_z: 1000
+  use_feature: false
+  use_edge_weight: false
+  train_node_embedding: false
+
+training:
+  lr: 0.0001
+  epochs: 50
+  runs: 1
+  eval_every_steps: 500
+  log_loss_every_steps: 50
+  checkpoint_metric: roc_auc@100
+  checkpoint_metric_mode: max
+  early_stopping_patience: null
+  early_stopping_min_delta: 0.0
+  tensorboard_log_dir: null
+
+runtime:
+  val_num_workers: null
+  max_val_batches: null
+  max_test_batches: null
+
+output:
+  dir: /data/lpp-runs/my_dataset/seal

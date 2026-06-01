@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scalable-node2vec-seal"
+version = "0.1.0"
+description = "Large-graph link prediction with Node2Vec and SEAL"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+classifiers = [
+  "License :: OSI Approved :: Apache Software License",
+]
+dependencies = [
+  "numba>=0.57",
+  "numpy>=1.24",
+  "PyYAML>=6.0",
+  "scikit-learn>=1.2",
+  "scipy>=1.10",
+  "torch>=2.0",
+  "tqdm>=4.65",
+]
+
+[project.optional-dependencies]
+grape = ["grape>=0.2"]
+monitor = ["psutil>=5.9"]
+ogb = ["ogb>=1.3.6"]
+seal = [
+  "tensorboard>=2.14",
+  "torch-geometric>=2.4",
+]
+test = ["pytest>=7.4"]
+
+[tool.setuptools]
+license-files = [
+  "LICENSE",
+  "NOTICE",
+  "THIRD_PARTY_NOTICES.md",
+]
+
+[tool.setuptools.packages.find]
+include = [
+  "baselines*",
+  "dataset_utils*",
+  "embedding_lp*",
+  "embedding_table_utils*",
+  "graph_csr*",
+  "node2vec*",
+  "scripts*",
+  "seal*",
+]

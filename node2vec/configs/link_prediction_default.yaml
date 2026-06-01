@@ -1,0 +1,61 @@
+dataset:
+  num_nodes: 0
+  root: /data/lpp/my_dataset
+  graph_csr_use_mmap: true
+  graph_csr_file_endian: little
+  graph_csr_allow_non_native: true
+  graph_csr_chunk_bytes: 268435456
+  mmap: true
+  has_self_loops: false
+  sample_seed: 12345
+
+embeddings:
+  checkpoint_dir: /data/lpp-runs/my_dataset/node2vec/checkpoints/final_embedding_shards
+
+output:
+  dir: /data/lpp-runs/my_dataset/node2vec_lp
+  history_file: metrics_history.json
+  final_metrics_file: final_metrics.json
+  resolved_config_file: resolved_config.json
+
+training:
+  lp_operator: hadamard
+  batch_size_edges: 2048
+  num_epochs: 5
+  learning_rate: 0.001
+  weight_decay: 0.000001
+  optimizer: adam
+  gradient_clip_norm: null
+  neg_per_pos_train: 1
+  neg_per_pos_val: 1
+  neg_per_pos_test: 1
+  num_workers: 4
+  val_num_workers: null
+  device_dtype: fp32
+  backend: nccl
+  checkpoint_metric: roc_auc@100
+  checkpoint_metric_mode: max
+  save_best_checkpoint: true
+  checkpoint_every_epoch: true
+  checkpoint_dir: null
+  resume_checkpoint_path: null
+  tensorboard_log_dir: null
+  early_stopping_patience: null
+  early_stopping_min_delta: 0.0
+  evaluate_train_split: false
+  eval_every: 1000  # global steps between val evals; null disables intra-epoch eval; test runs only after training
+  max_train_batches: 10000
+  max_val_batches: 10000
+  max_test_batches: 10000
+  log_every: 100
+  show_progress: true
+  seed: 42
+  is_directed: false
+  treat_as_undirected_for_lp: true
+  negative_edge_strategy: uniform_nonedge
+
+evaluation:
+  metrics: [roc_auc@k, hits@k, recall@k, ndcg@k, mrr, mrr@k]
+  metrics_at_k: [10, 50, 100]
+  eval_threshold: 0.5
+  save_predictions: false

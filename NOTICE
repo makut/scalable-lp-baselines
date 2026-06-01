@@ -1,0 +1,6 @@
+Scalable Link Prediction with Node2Vec and SEAL
+Copyright 2026 The authors
+
+This product includes modified portions of facebookresearch/SEAL_OGB,
+Copyright (c) Facebook, Inc. and its affiliates, licensed under the MIT
+License. See THIRD_PARTY_NOTICES.md for the complete upstream notice.
